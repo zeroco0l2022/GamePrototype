@@ -4,36 +4,40 @@ using GamePrototype.Units;
 namespace GamePrototype.Dungeon
 {
     public sealed class DungeonRoom
-    {      
-        public readonly string Name;
-        public readonly Unit Enemy;
-        public readonly Item Loot;
+    {
+        private readonly string _name;
+        public readonly Unit? Enemy;
+        public readonly Item? Loot;
         public readonly Dictionary<Direction, DungeonRoom> Rooms = new();
         public bool IsFinal => Rooms.Count == 0;
 
-        public DungeonRoom(string name) => Name = name;
+        public DungeonRoom(string name) 
+        {
+            _name = name;
+            Enemy = null;
+            Loot = null;
+        }
 
         public DungeonRoom(string name, Unit enemy)
         {
-            Name = name;
+            _name = name;
             Enemy = enemy;
+            Loot = null;
         }
 
-        public DungeonRoom(string name, Item item)
+        public DungeonRoom(string name, Item loot)
         {
-            Name = name;
-            Loot = item;
+            _name = name;
+            Enemy = null;
+            Loot = loot;
         }
 
         public bool TrySetDirection(Direction direction, DungeonRoom room) 
         {
-            if (Rooms.ContainsKey(direction))
-            {
-                Console.WriteLine($"Room {Name} already has room for {direction.ToString()}");
-                return false;
-            }
-            Rooms.Add(direction, room);
-            return true;
+            if (Rooms.TryAdd(direction, room)) return true;
+            Console.WriteLine($"Room {_name} already has room for {direction.ToString()}");
+            return false;
+
         }
     }
 }

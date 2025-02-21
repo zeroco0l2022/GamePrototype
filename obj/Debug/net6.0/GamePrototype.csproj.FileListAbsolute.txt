@@ -27,3 +27,4 @@ C:\Users\Felix\Downloads\GamePrototype\GamePrototype\obj\Debug\net6.0\refint\Gam
 C:\Users\Felix\Downloads\GamePrototype\GamePrototype\obj\Debug\net6.0\GamePrototype.pdb
 C:\Users\Felix\Downloads\GamePrototype\GamePrototype\obj\Debug\net6.0\GamePrototype.genruntimeconfig.cache
 C:\Users\Felix\Downloads\GamePrototype\GamePrototype\obj\Debug\net6.0\ref\GamePrototype.dll
+C:\Users\Felix\Downloads\GamePrototype\GamePrototype\obj\Debug\net6.0\GamePrototype.sourcelink.json

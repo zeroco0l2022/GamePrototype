@@ -1,4 +1,5 @@
 ﻿using GamePrototype.Game;
+using GamePrototype.Utils;
 
 namespace GamePrototype
 {
@@ -6,7 +7,9 @@ namespace GamePrototype
     {
         static void Main(string[] args)
         {
-            new GameLoop().StartGame();
+            Console.WriteLine("Select difficulty (0 - Easy, 1 - Hard):");
+            var difficulty = Console.ReadLine()?.ToLower() == "1" ? Difficulty.Hard : Difficulty.Easy;
+            new GameLoop(difficulty).StartGame();
         }
     }
 }

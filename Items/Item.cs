@@ -2,9 +2,9 @@
 {
     public abstract class Item
     {
-        public abstract bool Stackable { get; }
+        protected abstract bool Stackable { get; }
 
-        public virtual uint Amount { get; protected set; }
+        public uint Amount { get; private set; }
 
         public string Name { get; }
 

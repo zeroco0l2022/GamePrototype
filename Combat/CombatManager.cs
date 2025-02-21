@@ -6,9 +6,13 @@ namespace GamePrototype.Combat
     {
         private readonly Random _random = new();
         
-        public Unit StartCombat(Unit player, Unit enemy) => PlayCombatRoutine(player, enemy);
+        public Unit StartCombat(Unit player, Unit enemy)
+        {
+            var winner = PlayCombatRoutine(player, enemy);
+            return winner ?? player;
+        }
 
-        private Unit PlayCombatRoutine(Unit player, Unit enemy)
+        private Unit? PlayCombatRoutine(Unit player, Unit enemy)
         {
             Console.WriteLine(GetCombatString());
             while (player.Health > 0 && enemy.Health > 0) 
@@ -22,16 +26,13 @@ namespace GamePrototype.Combat
                     Console.WriteLine(GetCombatString());
                 }
             }
-            if (player.Health > 0 && enemy.Health == 0) 
-            {
-                return player;
-            }
-            else if (player.Health == 0 && enemy.Health > 0) 
-            {
-                return enemy;
-            }
 
-            return null;
+            return player.Health switch
+            {
+                > 0 when enemy.Health == 0 => player,
+                0 when enemy.Health > 0 => enemy,
+                _ => null
+            };
         }
 
         private string GetCombatString() => $"Type {RockPaperScissors.Rock} = {(int)RockPaperScissors.Rock}" +
@@ -44,23 +45,13 @@ namespace GamePrototype.Combat
             Console.WriteLine($"Result player = {rockPaperScissors} and enemy = {enemyInput}");
             switch (rockPaperScissors) 
             {
-                // player hit
                 case RockPaperScissors.Rock when enemyInput == RockPaperScissors.Scissors:
-                    ApplyDamage(player, enemy);
-                    break;
                 case RockPaperScissors.Scissors when enemyInput == RockPaperScissors.Paper:
-                    ApplyDamage(player, enemy);
-                    break;
                 case RockPaperScissors.Paper when enemyInput == RockPaperScissors.Rock:
                     ApplyDamage(player, enemy);
                     break;
-                // enemy hit
                 case RockPaperScissors.Scissors when enemyInput == RockPaperScissors.Rock:
-                    ApplyDamage(enemy, player);
-                    break;
                 case RockPaperScissors.Paper when enemyInput == RockPaperScissors.Scissors:
-                    ApplyDamage(enemy, player);
-                    break;
                 case RockPaperScissors.Rock when enemyInput == RockPaperScissors.Paper:
                     ApplyDamage(enemy, player);
                     break;

@@ -5,20 +5,36 @@ namespace GamePrototype.Items.EquipItems
 {
     public abstract class EquipItem : Item
     {
-        private uint _durability;
-        private uint _maxDurability;
-        public uint Durability { get => _durability; protected set => _durability = value; }
-        public override bool Stackable => false;
+        public uint Durability { get; protected set; }
+
+        public uint MaxDurability { get; }
+
+        protected override bool Stackable => false;
 
         public abstract EquipSlot Slot { get; }
 
-        protected EquipItem(uint maxDurability, string name) : base(name) => _maxDurability = maxDurability;
+        protected EquipItem(uint maxDurability, string name) : base(name)
+        {
+            MaxDurability = maxDurability;
+            Durability = maxDurability;
+        }
 
-        public void ReduceDurability(uint delta) => _durability -= delta;
+        public void ReduceDurability(uint delta)
+        {
+            if (Durability <= delta)
+            {
+                Durability = 0;
+                Console.WriteLine($"{Name} is broken!");
+            }
+            else
+            {
+                Durability -= delta;
+            }
+        }
 
         public void Repair(uint delta) => 
-            _durability += _durability + delta > _maxDurability 
-            ? _maxDurability 
-            : _durability + delta;
+            Durability += Durability + delta > MaxDurability 
+            ? MaxDurability 
+            : Durability + delta;
     }
 }

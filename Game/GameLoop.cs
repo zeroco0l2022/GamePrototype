@@ -2,15 +2,30 @@
 using GamePrototype.Dungeon;
 using GamePrototype.Units;
 using GamePrototype.Utils;
+using GamePrototype.Utils.Builders;
+using GamePrototype.Utils.Factories;
 
 namespace GamePrototype.Game
 {
     public sealed class GameLoop
     {
-        private Unit _player;
-        private DungeonRoom _dungeon;
-        private readonly CombatManager _combatManager = new CombatManager();
+        private Unit _player = null!;
+        private DungeonRoom _dungeon = null!;
+        private readonly CombatManager _combatManager = new();
+        private readonly IUnitFactory _unitFactory;
+        private readonly IDungeonBuilder _dungeonBuilder;
         
+        public GameLoop(Difficulty difficulty)
+        {
+            _unitFactory = difficulty == Difficulty.Easy 
+                ? new EasyUnitFactory() 
+                : new HardUnitFactory();
+            
+            _dungeonBuilder = difficulty == Difficulty.Easy 
+                ? new EasyDungeonBuilder() 
+                : new HardDungeonBuilder();
+        }
+
         public void StartGame() 
         {
             Initialize();
@@ -23,9 +38,16 @@ namespace GamePrototype.Game
         private void Initialize()
         {
             Console.WriteLine("Welcome, player!");
-            _dungeon = DungeonBuilder.BuildDungeon();
-            Console.WriteLine("Enter your name");
-            _player = UnitFactoryDemo.CreatePlayer(Console.ReadLine());
+            Console.WriteLine("Enter your name:");
+            var playerName = Console.ReadLine();
+            if (string.IsNullOrEmpty(playerName))
+            {
+                playerName = "Player";
+            }
+            
+            _player = _unitFactory.CreatePlayer(playerName);
+            _dungeon = _dungeonBuilder.BuildDungeon(_unitFactory);
+            
             Console.WriteLine($"Hello {_player.Name}");
         }
 
